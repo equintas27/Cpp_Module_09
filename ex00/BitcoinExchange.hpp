@@ -25,6 +25,8 @@ class BitcoinExchange
         std::map<std::string, double> _database;
         void loadDatabase();
         bool isValidDate(const std::string& date);
+        int isValidValue(double value);
+        double getExchangeRate(const std::string& date);
     public:
         BitcoinExchange();
         BitcoinExchange(const BitcoinExchange& src);
