@@ -10,4 +10,25 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef BITCOINEXCHANGE_HPP
+# define BITCOINEXCHANGE_HPP
 
+#include <iostream>
+#include <map>
+#include <string>
+#include <fstream>
+#include <sstream>
+
+class BitcoinExchange
+{
+    private:
+        std::map<std::string, double> _database;
+        void loadDatabase();
+    public:
+        BitcoinExchange();
+        BitcoinExchange(const BitcoinExchange& src);
+        BitcoinExchange& operator=(const BitcoinExchange& rhs);
+        ~BitcoinExchange();
+};
+
+#endif
