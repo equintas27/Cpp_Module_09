@@ -14,9 +14,12 @@
 
 int main(int ac, char *av[])
 {
-    (void)ac;
-    (void)av;
-    BitcoinExchange bt;
-
+    if (ac == 2)
+    {
+        BitcoinExchange bt;
+        bt.processInput(av[1]);
+    }
+    else
+        std::cerr << "Error: could not open file" << std::endl;
     return (0);
 }

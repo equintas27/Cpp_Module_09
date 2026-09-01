@@ -24,11 +24,13 @@ class BitcoinExchange
     private:
         std::map<std::string, double> _database;
         void loadDatabase();
+        bool isValidDate(const std::string& date);
     public:
         BitcoinExchange();
         BitcoinExchange(const BitcoinExchange& src);
         BitcoinExchange& operator=(const BitcoinExchange& rhs);
         ~BitcoinExchange();
+        void processInput(const std::string& filename);
 };
 
 #endif
