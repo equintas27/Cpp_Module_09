@@ -107,7 +107,27 @@ int BitcoinExchange::isValidValue(double value)
 
 double BitcoinExchange::getExchangeRate(const std::string& date)
 {
+    std::map<std::string, double>::iterator it;
 
+    it = _database.lower_bound(date);
+    if (it == _database.end())
+    {
+        it--;
+        return(it->second);
+    }
+    if (it->first == date)
+        return (it->second);
+    else
+    {
+        if (it == _database.begin())
+        {
+            std::cerr << "Error: no exchange rate available for this date." << std::endl;
+            return (-1);
+        }
+            
+        it--;
+        return (it->second);
+    }
 }
 
 void BitcoinExchange::processInput(const std::string& filename)
@@ -121,6 +141,8 @@ void BitcoinExchange::processInput(const std::string& filename)
     std::string line;
     std::string date;
     double value;
+    double rate;
+    char extra;
 
     getline(file, line);
     while (getline(file, line))
@@ -139,6 +161,11 @@ void BitcoinExchange::processInput(const std::string& filename)
             std::cerr << "Error: bad input => " << line << std::endl;
             continue;
         }
+        if (ss >> extra)
+        {
+            std::cerr << "Error: bad input => " << line << std::endl;
+            continue;
+        }
         if(isValidValue(value) == 1)
         {
             std::cerr << "Error: not a positive number" << std::endl;
@@ -149,8 +176,10 @@ void BitcoinExchange::processInput(const std::string& filename)
             std::cerr << "Error: too large a number." << std::endl;
             continue;
         }
-        std::cout << "DATE [" << date << "]"<< std::endl;
-        std::cout << "VALUE ["<< value << "]"<< std::endl;
+        rate = getExchangeRate(date);
+        if (rate == -1)
+            continue;
+        std::cout << date << " => " << value << " = " << value * rate << std::endl;
     }
 }
 
