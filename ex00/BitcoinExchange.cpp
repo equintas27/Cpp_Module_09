@@ -32,12 +32,6 @@ void BitcoinExchange::loadDatabase()
         ss >> rate;
         this->_database[date] = rate;
     }
-    /*std::map<std::string, double>::iterator i = this->_database.begin();
-    while (i != this->_database.end())
-    {
-        std::cout << i->first << " --> " << i->second << std::endl;
-        i++;
-    }*/
 }
 
 bool BitcoinExchange::isValidDate(const std::string& date)
