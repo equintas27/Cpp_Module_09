@@ -10,4 +10,25 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef RPN_HPP
+#define RPN_HPP
 
+#include <stack>
+#include <string>
+#include <sstream>
+#include <iostream>
+
+class RPN
+{
+    private:
+        std::stack<int> _stack;
+    public:
+        RPN();
+        RPN(const RPN& src);
+        RPN& operator=(const RPN& rhs);
+        ~RPN();
+
+        void calculate(const std::string& expression);
+};
+
+#endif

@@ -10,4 +10,31 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "RPN.hpp"
 
+RPN::RPN()
+{
+
+}
+
+RPN::RPN(const RPN& src)
+{
+    *this = src;
+}
+
+RPN& RPN::operator=(const RPN& rhs)
+{
+    if (this != &rhs)
+        this->_stack = rhs._stack;
+    return (*this);
+}
+
+RPN::~RPN()
+{
+
+}
+
+void RPN::calculate(const std::string& expression)
+{
+    std::istringstream iss(expression);
+}
