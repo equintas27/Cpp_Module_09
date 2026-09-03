@@ -10,4 +10,29 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef PMERGEME_HPP
+# define PMERGEME_HPP
 
+#include <vector>
+#include <string>
+#include <deque>
+#include <sstream>
+#include <iostream>
+#include <cstdlib>
+#include <climits>
+
+class PmergeMe
+{
+    private:
+        std::vector<int>  _vector;
+        std::deque<int> _deque;
+        bool IsNumber(const std::string& str, int& numb);
+    public:
+        PmergeMe();
+        PmergeMe(const PmergeMe& src);
+        PmergeMe& operator=(const PmergeMe& rhs);
+        ~PmergeMe();
+        void ParseInput(int ac, char *av[]);
+};
+
+#endif
