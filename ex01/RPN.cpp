@@ -64,7 +64,7 @@ void RPN::calculate(const std::string& expression)
         {
             if (this->_stack.size() < 2)
             {
-                std::cout << "Error" << std::endl;
+                std::cerr << "Error" << std::endl;
                 return ;
             }
             int num1 = this->_stack.top();
@@ -81,16 +81,21 @@ void RPN::calculate(const std::string& expression)
             {
                 if (num1 == 0)
                 {
-                    std::cout << "Error" << std::endl;
+                    std::cerr << "Error" << std::endl;
                     return ;
                 }
                 this->_stack.push(num2 / num1);
             }
         }
+        else
+        {
+            std::cerr << "Error" << std::endl;
+            return ;
+        }
     }
     if (this->_stack.size() != 1)
     {
-        std::cout << "Error" << std::endl;
+        std::cerr << "Error" << std::endl;
         return;
     }
     std::cout << this->_stack.top() << std::endl;
