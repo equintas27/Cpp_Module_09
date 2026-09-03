@@ -22,6 +22,7 @@ class RPN
 {
     private:
         std::stack<int> _stack;
+        bool check_signal(const std::string& token);
     public:
         RPN();
         RPN(const RPN& src);

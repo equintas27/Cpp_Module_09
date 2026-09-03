@@ -34,7 +34,41 @@ RPN::~RPN()
 
 }
 
+bool RPN::check_signal(const std::string& token)
+{
+    if (token.size() == 1 && token[0] == '+')
+        return (true);
+    else if (token.size() == 1 && token[0] == '-')
+        return (true);
+    else if (token.size() == 1 && token[0] == '*')
+        return (true);
+    else if (token.size() == 1 && token[0] == '/')
+        return (true);
+    else
+        return (false);
+}
+
 void RPN::calculate(const std::string& expression)
 {
+    std::string token;
     std::istringstream iss(expression);
+
+    while (iss >> token)
+    {
+        if (token.size() == 1 && token[0] >= '0' && token[0] <= '9')
+        {
+            int numb = token[0] - '0';
+            this->_stack.push(numb);
+        }
+        else if (check_signal(token))
+        {
+            if (this->_stack.size() < 2)
+            {
+                std::cout << "Error" << std::endl;
+                return ;
+            }
+            int numb
+        }
+        
+    }
 }
