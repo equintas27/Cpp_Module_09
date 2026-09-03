@@ -67,8 +67,31 @@ void RPN::calculate(const std::string& expression)
                 std::cout << "Error" << std::endl;
                 return ;
             }
-            int numb
+            int num1 = this->_stack.top();
+            this->_stack.pop();
+            int num2 = this->_stack.top();
+            this->_stack.pop();
+            if (token[0] == '+')
+                this->_stack.push(num1 + num2);
+            else if (token[0] == '-')
+                this->_stack.push(num2 - num1);
+            else if (token[0] == '*')
+                this->_stack.push(num1 * num2);
+            else if (token[0] == '/')
+            {
+                if (num1 == 0)
+                {
+                    std::cout << "Error" << std::endl;
+                    return ;
+                }
+                this->_stack.push(num2 / num1);
+            }
         }
-        
     }
+    if (this->_stack.size() != 1)
+    {
+        std::cout << "Error" << std::endl;
+        return;
+    }
+    std::cout << this->_stack.top() << std::endl;
 }
