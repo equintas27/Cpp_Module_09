@@ -20,13 +20,20 @@
 #include <iostream>
 #include <cstdlib>
 #include <climits>
+#include <utility>
 
 class PmergeMe
 {
     private:
         std::vector<int>  _vector;
         std::deque<int> _deque;
+        std::vector< std::pair<int, int> > _pairs;
+        std::vector<int> _smaller;
+        std::vector<int> _larger;
+        void makePairs();
+        void separatePairs();
         bool IsNumber(const std::string& str, int& numb);
+
     public:
         PmergeMe();
         PmergeMe(const PmergeMe& src);

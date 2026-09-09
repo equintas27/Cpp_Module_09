@@ -13,14 +13,13 @@
 #include "PmergeMe.hpp"
 
 PmergeMe::PmergeMe()
-{
+{}
 
-}
 PmergeMe::PmergeMe(const PmergeMe& src)
 {
     *this = src;
-
 }
+
 PmergeMe& PmergeMe::operator=(const PmergeMe& rhs)
 {
     if (this != &rhs)
@@ -32,9 +31,7 @@ PmergeMe& PmergeMe::operator=(const PmergeMe& rhs)
 }
 
 PmergeMe::~PmergeMe()
-{
-
-}
+{}
 
 bool PmergeMe::IsNumber(const std::string& str, int& numb)
 {
@@ -47,6 +44,55 @@ bool PmergeMe::IsNumber(const std::string& str, int& numb)
     return (true);
 }
 
+void PmergeMe::makePairs()
+{
+    size_t i = 0;
+    while (i + 1 < this->_vector.size())
+    {
+        int first = this->_vector[i];
+        int second = this->_vector[i + 1];
+
+        if (first > second)
+            std::swap(first, second);
+        this->_pairs.push_back(std::make_pair(first, second));
+        i += 2;
+    }
+    std::vector<std::pair<int, int> >::iterator it;
+
+    it = this->_pairs.begin();
+    while (it != this->_pairs.end())
+    {
+        std::cout << it->first << "  " << it->second << std::endl;
+        it++;
+    }
+}
+
+void PmergeMe::separatePairs()
+{
+    std::vector<std::pair<int, int> >::iterator it;
+    it = this->_pairs.begin();
+    while (it != this->_pairs.end())
+    {
+        this->_larger.push_back(it->second);
+        this->_smaller.push_back(it->first);
+        std::cout << it->first << "  " << it->second << std::endl;
+        it++;
+    }
+    std::cout << "=== Maiores ===" << std::endl;
+    std::vector<int>::iterator i = this->_larger.begin();
+    while (i != this->_larger.end())
+    {
+        std::cout << *i << std::endl;
+        i++;
+    }
+    std::cout << "=== Menores === " << std::endl;
+    std::vector<int>::iterator ite = this->_smaller.begin();
+    while (ite != this->_smaller.end())
+    {
+        std::cout << *ite << std::endl;
+        ite++;
+    }
+}
 
 void PmergeMe::ParseInput(int ac, char *av[])
 {
@@ -76,10 +122,14 @@ void PmergeMe::ParseInput(int ac, char *av[])
         std::cout << "Vector: " << *it << std::endl;
         it++;
     }
-     std::deque<int>::iterator ite = this->_deque.begin();
+
+    std::deque<int>::iterator ite = this->_deque.begin();
     while (ite != this->_deque.end())
     {
         std::cout << "Deque: " << *ite << std::endl;
         ite++;
     }
+    std::cout << "====== Pares ======" << std::endl;
+    makePairs();
+    separatePairs();
 }
