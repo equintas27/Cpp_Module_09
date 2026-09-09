@@ -27,12 +27,12 @@ class PmergeMe
     private:
         std::vector<int>  _vector;
         std::deque<int> _deque;
-        std::vector< std::pair<int, int> > _pairs;
         std::vector<int> _smaller;
         std::vector<int> _larger;
-        void makePairs();
+        std::vector< std::pair<int, int> > makePairs(const std::vector<int>& values);
         void separatePairs();
         bool IsNumber(const std::string& str, int& numb);
+        std::vector<int> sortLarger(const std::vector<int>& values);
 
     public:
         PmergeMe();
