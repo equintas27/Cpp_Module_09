@@ -14,8 +14,12 @@
 
 int main(int ac, char *av[])
 {
+    if (ac == 1)
+    {
+        std::cout << "Insira argumentos!" << std::endl;
+        return (1);
+    }
     PmergeMe pm;
-
     pm.ParseInput(ac, av);
     return (0);
 }

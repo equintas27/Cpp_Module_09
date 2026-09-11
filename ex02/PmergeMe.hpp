@@ -22,6 +22,14 @@
 #include <climits>
 #include <utility>
 
+typedef struct s_PairingResult
+{
+    std::vector< std::pair<int, int> > pairs;
+    int straggled;
+    bool hasStraggled;
+} t_PairingResult;
+
+
 class PmergeMe
 {
     private:
@@ -29,8 +37,8 @@ class PmergeMe
         std::deque<int> _deque;
         std::vector<int> _smaller;
         std::vector<int> _larger;
-        std::vector< std::pair<int, int> > makePairs(const std::vector<int>& values);
-        void separatePairs();
+        t_PairingResult makePairs(const std::vector<int>& values);
+        void separatePairs(const std::vector< std::pair<int, int> >& pairs, std::vector<int>& smaller, std::vector<int>& larger);
         bool IsNumber(const std::string& str, int& numb);
         std::vector<int> sortLarger(const std::vector<int>& values);
 

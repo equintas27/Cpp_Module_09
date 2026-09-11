@@ -14,7 +14,7 @@ CXX = c++
 
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 
-HEADER = BitcoinExchange.hpp \
+HEADER = BitcoinExchange.hpp 
 
 OBJS = BitcoinExchange.o \
 	   main.o
