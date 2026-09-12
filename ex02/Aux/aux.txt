@@ -1,0 +1,15 @@
+Crie o struct Par (líder + seguidor)Crie um struct/par que guarde os dois valores juntos: o líder (o maior do par) e o seguidor (o menor). Esse struct inteiro vai viajar pela recursão como uma unidade só — nada de separar em duas listas paralelas.
+2
+Termine makePairs devolvendo vector<Par>Percorra o vetor de dois em dois, compare os dois valores e monte um Par com líder = maior, seguidor = menor. Se sobrar um elemento (tamanho ímpar), guarde-o à parte como 'leftover' — ele não forma par e só entra no final do algoritmo. Teste isoladamente: pra uma entrada de 6 elementos, confira se saem 3 Pares corretos.
+3
+Ordene recursivamente pelos líderesSua função recursiva agora recebe e devolve vector<Par> (ou só os líderes, se preferir separar em duas funções — mas o Par inteiro precisa estar acessível). Ordene comparando SOMENTE o campo líder de cada Par — o seguidor vem de carona, sem você precisar fazer nada. Caso base: 0 ou 1 elemento já está ordenado. Teste com poucos pares (4, depois 8) e confira se os líderes saem ordenados.
+4
+Monte a cadeia principal desembrulhando os ParesCom os Pares já ordenados pelo líder (líder1 < líder2 < ... < líderN), só agora é hora de desembrulhar: comece a cadeia com o seguidor do primeiro Par, depois o líder do primeiro Par, depois os líderes dos pares seguintes em ordem. Os seguidores dos outros pares (2° em diante) ficam guardados à parte pra inserir depois — e como ainda estão dentro dos mesmos Pares ordenados, você já sabe exatamente qual seguidor pertence a qual líder, sem precisar buscar nada.
+5
+Gere a ordem de inserção de JacobsthalCalcule a sequência J(0)=0, J(1)=1, J(k)=J(k-1)+2·J(k-2). A partir dela, monte a ordem em que os seguidores restantes (do 2º Par em diante) devem ser inseridos: para cada 'salto' de Jacobsthal, insira os índices em ordem decrescente até o salto anterior. Teste essa função sozinha — para 5 pares o resultado esperado é a ordem de índices 3, 2, 5, 4.
+6
+Insira cada seguidor via busca bináriaPara cada seguidor, na ordem do passo anterior: seu Par de origem te diz exatamente qual é o líder correspondente. Ache a posição atual desse líder na cadeia (ele já está lá) e faça busca binária SOMENTE até essa posição — nunca depois, porque o seguidor é sempre menor que seu líder. Insira na posição encontrada.
+7
+Insira o elemento sobrando (se houver)Se sobrou um elemento sem par no passo 2, insira-o agora, com busca binária sobre a cadeia inteira já montada. Esse é o último passo — depois disso a cadeia é o resultado final.
+8
+Valide com força brutaCompare a saída do seu algoritmo com std::sort (ou sorted() do Python) pra várias entradas aleatórias: 1 elemento, número par, número ímpar, valores duplicados, e lista já ordenada. Só considere correto quando bater 100% nesses casos.

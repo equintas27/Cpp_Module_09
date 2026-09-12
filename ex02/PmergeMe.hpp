@@ -35,12 +35,10 @@ class PmergeMe
     private:
         std::vector<int>  _vector;
         std::deque<int> _deque;
-        std::vector<int> _smaller;
-        std::vector<int> _larger;
         t_PairingResult makePairs(const std::vector<int>& values);
         void separatePairs(const std::vector< std::pair<int, int> >& pairs, std::vector<int>& smaller, std::vector<int>& larger);
         bool IsNumber(const std::string& str, int& numb);
-        std::vector<int> sortLarger(const std::vector<int>& values);
+        std::vector<int> MergeInsertionSort(const std::vector<int>& numbers);
 
     public:
         PmergeMe();

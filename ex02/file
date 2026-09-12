@@ -1,0 +1,128 @@
+# include <vector>
+#include "PmergeMe.hpp"
+std::vector<int> PmergeMe::MergeInsertionSort(const std::vector<int>& numbers)
+{
+    if (numbers.size() <= 1)
+        return numbers;
+
+    t_PairingResult result = makePairs(numbers);
+
+    if (result.pairs.empty())
+    {
+        if (result.hasStraggled)
+            return numbers; // Retorna o único elemento
+    }
+
+    std::vector<int> mainChain;
+    for (size_t i = 0; i < result.pairs.size(); ++i)
+        mainChain.push_back(result.pairs[i].second);
+
+    mainChain = MergeInsertionSort(mainChain);
+
+    std::vector<int> pend;
+    for (size_t i = 0; i < mainChain.size(); ++i)
+    {
+        for (size_t j = 0; j < result.pairs.size(); ++j)
+        {
+            if (mainChain[i] == result.pairs[j].second)
+            {
+                pend.push_back(result.pairs[j].first);
+                break;
+            }
+        }
+    }
+
+    // 4. Inserir b1 na frente da mainChain
+    if (!pend.empty())
+    {
+        mainChain.insert(mainChain.begin(), pend[0]);
+    }
+
+    // 5. Inserir os restantes elementos do 'pend' usando a Sequência de Jacobsthal + Busca Binária
+    insertPendElements(mainChain, pend, result.hasStraggled ? result.straggled : -1);
+
+    return mainChain;
+}
+
+
+#include "PmergeMe.hpp"
+#include <vector>
+#include <algorithm> // Para std::lower_bound
+
+// Gera os números de Jacobsthal até cobrir o tamanho necessário
+std::vector<size_t> generateJacobsthalSequence(size_t size)
+{
+    std::vector<size_t> jacob;
+    if (size == 0)
+        return jacob;
+
+    jacob.push_back(0);
+    jacob.push_back(1);
+
+    while (true)
+    {
+        size_t next = jacob[jacob.size() - 1] + 2 * jacob[jacob.size() - 2];
+        jacob.push_back(next);
+        if (next >= size)
+            break;
+    }
+    return jacob;
+}
+
+void PmergeMe::insertPendElements(std::vector<int>& mainChain, const std::vector<int>& pend, int unpaired)
+{
+    size_t pendSize = pend.size();
+    if (pendSize <= 1 && unpaired == -1)
+        return;
+
+    // Gera a sequência de Jacobsthal
+    std::vector<size_t> jacobSequence = generateJacobsthalSequence(pendSize);
+
+    // Array para controlar quais elementos de 'pend' já foram inseridos
+    std::vector<bool> inserted(pendSize, false);
+    inserted[0] = true; // pend[0] já foi inserido antes de chamar esta função
+
+    // Inserção com base na sequência de Jacobsthal (começando em J3 = 3)
+    for (size_t k = 3; k < jacobSequence.size(); ++k)
+    {
+        size_t targetIndex = jacobSequence[k] - 1;
+        if (targetIndex >= pendSize)
+            targetIndex = pendSize - 1;
+
+        size_t boundIndex = jacobSequence[k - 1] - 1;
+
+        // Insere em ordem decrescente do lote atual até ao limite do lote anterior
+        for (size_t i = targetIndex; i > boundIndex; --i)
+        {
+            if (i < pendSize && !inserted[i])
+            {
+                int valToInsert = pend[i];
+
+                // Pesquisa binária na mainChain usando std::lower_bound
+                std::vector<int>::iterator pos = std::lower_bound(mainChain.begin(), mainChain.end(), valToInsert);
+                mainChain.insert(pos, valToInsert);
+
+                inserted[i] = true;
+            }
+        }
+    }
+
+    // Inserção de segurança para quaisquer elementos pendentes remanescentes
+    for (size_t i = 1; i < pendSize; ++i)
+    {
+        if (!inserted[i])
+        {
+            int valToInsert = pend[i];
+            std::vector<int>::iterator pos = std::lower_bound(mainChain.begin(), mainChain.end(), valToInsert);
+            mainChain.insert(pos, valToInsert);
+            inserted[i] = true;
+        }
+    }
+
+    // Por fim, insere o elemento ímpar/desemparelhado (se existir)
+    if (unpaired != -1)
+    {
+        std::vector<int>::iterator pos = std::lower_bound(mainChain.begin(), mainChain.end(), unpaired);
+        mainChain.insert(pos, unpaired);
+    }
+}

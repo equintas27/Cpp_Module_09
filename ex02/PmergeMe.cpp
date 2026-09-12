@@ -46,15 +46,14 @@ bool PmergeMe::IsNumber(const std::string& str, int& numb)
 
 t_PairingResult PmergeMe::makePairs(const std::vector<int>& values)
 {
-    t_PairingResult numb;
+    t_PairingResult result;
     size_t i = 0;
-     numb.hasStraggled = false;
+    result.hasStraggled = false;
     if (values.size() % 2 != 0)
     {
-        numb.hasStraggled = true;
-        numb.straggled = values[values.size() - 1];
+        result.hasStraggled = true;
+        result.straggled = values[values.size() - 1];
     }
-
     while (i + 1 < values.size())
     {
         int first = values[i];
@@ -62,21 +61,43 @@ t_PairingResult PmergeMe::makePairs(const std::vector<int>& values)
 
         if (first > second)
             std::swap(first, second);
-        numb.pairs.push_back(std::make_pair(first, second));
+        result.pairs.push_back(std::make_pair(first, second));
         i += 2;
     }
-    std::vector<std::pair<int, int> >::iterator it;
-
-    it = numb.pairs.begin();
-    while (it != numb.pairs.end())
-    {
-        std::cout << it->first << "  " << it->second << std::endl;
-        it++;
-    }
-    return (numb);
+    return (result);
 }
 
-void PmergeMe::separatePairs(const std::vector< std::pair<int, int> >& pairs, std::vector<int>& smaller, std::vector<int>& larger)
+std::vector<int> PmergeMe::MergeInsertionSort(const std::vector<int>& numbers)
+{
+    std::vector<int> largers;
+    std::vector<int> sortedLargers;
+
+    if (numbers.size() <= 1)
+        return (numbers);
+    t_PairingResult result = makePairs(numbers);
+    for (size_t it = 0; it < result.pairs.size(); it++)
+        largers.push_back(result.pairs[it].second);
+
+    sortedLargers = MergeInsertionSort(largers);
+    std::vector<int> smaller;
+    for (size_t i = 0; i < sortedLargers.size(); i++)
+    {
+        for (size_t j = 0; j < result.pairs.size(); j++)
+        {
+            if (sortedLargers[i] == result.pairs[j].second)
+            {
+                smaller.push_back(result.pairs[j].first);
+                break;
+            }
+        }
+    }
+    if (!smaller.empty())
+        sortedLargers.insert(sortedLargers.begin(), smaller[0]);
+
+    return (sortedLargers);
+}
+
+/*void PmergeMe::separatePairs(const std::vector< std::pair<int, int> >& pairs, std::vector<int>& smaller, std::vector<int>& larger)
 {
     std::vector<std::pair<int, int> >::const_iterator it;
     it = pairs.begin();
@@ -100,26 +121,8 @@ void PmergeMe::separatePairs(const std::vector< std::pair<int, int> >& pairs, st
         std::cout << *ite << std::endl;
         ite++;
     }
-}
+}*/
 
-std::vector<int> PmergeMe::sortLarger(const std::vector<int>& values)
-{
-    std::vector<int> larger;
-    std::vector<int> set;
-    t_PairingResult res = makePairs(values);
-    std::vector<std::pair<int, int> >::const_iterator it;
-
-    if (values.size() == 1)
-        return (values);
-    it = res.pairs.begin();
-    while (it != res.pairs.end())
-    {
-        larger.push_back(it->second);
-        it++;
-    }
-    set = sortLarger(larger);
-    return (larger);
-}
 
 void PmergeMe::ParseInput(int ac, char *av[])
 {
@@ -154,11 +157,19 @@ void PmergeMe::ParseInput(int ac, char *av[])
         std::cout << "Deque: " << *ite << std::endl;
         ite++;
     }
-    std::cout << "====== Pares ======" << std::endl;
+    /*std::cout << "====== Pares ======" << std::endl;
     t_PairingResult res = makePairs(this->_vector);
     std::vector<int> smaller;
     std::vector<int> larger;
     if (res.hasStraggled)
         std::cout << "Straggled: " << res.straggled << std::endl;
-    separatePairs(res.pairs, smaller, larger);
+    separatePairs(res.pairs, smaller, larger);*/
+
+    std::vector<int> numbers = MergeInsertionSort(this->_vector);
+    std::vector<int>::iterator a = numbers.begin();
+    while (a != numbers.end())
+    {
+        std::cout  << *a << std::endl;
+        a++;
+    }
 }
