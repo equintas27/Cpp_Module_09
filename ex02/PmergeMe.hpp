@@ -39,6 +39,7 @@ class PmergeMe
         void separatePairs(const std::vector< std::pair<int, int> >& pairs, std::vector<int>& smaller, std::vector<int>& larger);
         bool IsNumber(const std::string& str, int& numb);
         std::vector<int> MergeInsertionSort(const std::vector<int>& numbers);
+        void insertPendElements(std::vector<int>& mainChain, const std::vector<int>& smallers, int straggled);
 
     public:
         PmergeMe();
