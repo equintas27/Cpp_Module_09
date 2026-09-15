@@ -236,8 +236,8 @@ void PmergeMe::printAll(const std::vector<int>& vector, const std::deque<int>& d
     std::clock_t end_d = std::clock();
     double timeDeque = static_cast<double>(end_d - start_d) / (CLOCKS_PER_SEC / 1000000.0);
     std::cout << std::endl;
-    std::cout << "Time to process a range of " << vector.size() << " elements with std::vector<int>: " << timeVector << " us" << std::endl;
-    std::cout << "Time to process a range of " << deque.size() << " elements with std::deque<int>: " << timeDeque << " us" << std::endl;
+    std::cout << "Time to process a range of " << vector.size() << " elements with std::vector<int>: "<< std::fixed << std::setprecision(5) << timeVector << " us" << std::endl;
+    std::cout << "Time to process a range of " << deque.size() << " elements with std::deque<int>: "<< std::fixed << std::setprecision(5) << timeDeque << " us" << std::endl;
 }
 
 void PmergeMe::ParseInput(int ac, char *av[])
