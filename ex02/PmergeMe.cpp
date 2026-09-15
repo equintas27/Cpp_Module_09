@@ -44,9 +44,10 @@ bool PmergeMe::IsNumber(const std::string& str, int& numb)
     return (true);
 }
 
-t_PairingResult PmergeMe::makePairs(const std::vector<int>& values)
+// Vector Functions
+t_PairingResultVector PmergeMe::makePairsVector(const std::vector<int>& values)
 {
-    t_PairingResult result;
+    t_PairingResultVector result;
     size_t i = 0;
     result.hasStraggled = false;
     if (values.size() % 2 != 0)
@@ -67,7 +68,7 @@ t_PairingResult PmergeMe::makePairs(const std::vector<int>& values)
     return (result);
 }
 
-int findInsertPosition(const std::vector<int>& mainChain, int value)
+int findInsertPositionVector(const std::vector<int>& mainChain, int value)
 {
     int low = 0;
     int high = mainChain.size();
@@ -83,36 +84,34 @@ int findInsertPosition(const std::vector<int>& mainChain, int value)
     return (low);
 }
 
-void PmergeMe::insertPendElements(std::vector<int>& mainChain, const std::vector<int>& smallers, int straggled)
+void PmergeMe::insertPendElementsVector(std::vector<int>& mainChain, const std::vector<int>& smallers, int straggled)
 {
-    (void)straggled;
-
     size_t i = 0;
     int position; 
     while (i < smallers.size())
     {
-        position = findInsertPosition(mainChain, smallers[i]);
+        position = findInsertPositionVector(mainChain, smallers[i]);
         mainChain.insert(mainChain.begin() + position, smallers[i]);
         i++;
     }
     if (straggled != -1)
     {
-        position = findInsertPosition(mainChain, straggled);
+        position = findInsertPositionVector(mainChain, straggled);
         mainChain.insert(mainChain.begin() + position, straggled);
     }
 }
 
-std::vector<int> PmergeMe::MergeInsertionSort(const std::vector<int>& numbers)
+std::vector<int> PmergeMe::MergeInsertionSortVector(const std::vector<int>& numbers)
 {
     std::vector<int> largers;
     std::vector<int> sortedLargers;
 
     if (numbers.size() <= 1)
         return (numbers);
-    t_PairingResult result = makePairs(numbers);
+    t_PairingResultVector result = makePairsVector(numbers);
     for (size_t it = 0; it < result.pairs.size(); it++)
         largers.push_back(result.pairs[it].second);
-    sortedLargers = MergeInsertionSort(largers);
+    sortedLargers = MergeInsertionSortVector(largers);
     std::vector<int> smaller;
     for (size_t i = 0; i < sortedLargers.size(); i++)
     {
@@ -126,9 +125,96 @@ std::vector<int> PmergeMe::MergeInsertionSort(const std::vector<int>& numbers)
         }
     }
     if (result.hasStraggled)
-        insertPendElements(sortedLargers, smaller, result.straggled);
+        insertPendElementsVector(sortedLargers, smaller, result.straggled);
     else
-        insertPendElements(sortedLargers, smaller, -1);
+        insertPendElementsVector(sortedLargers, smaller, -1);
+    return (sortedLargers);
+}
+
+// Deque Functions
+t_PairingResultDeque PmergeMe::makePairsDeque(const std::deque<int>& values)
+{
+    t_PairingResultDeque result;
+    size_t i = 0;
+    result.hasStraggled = false;
+    if (values.size() % 2 != 0)
+    {
+        result.hasStraggled = true;
+        result.straggled = values[values.size() - 1];
+    }
+    while (i + 1 < values.size())
+    {
+        int first = values[i];
+        int second = values[i + 1];
+
+        if (first > second)
+            std::swap(first, second);
+        result.pairs.push_back(std::make_pair(first, second));
+        i += 2;
+    }
+    return (result);
+}
+
+int findInsertPositionDeque(const std::deque<int>& mainChain, int value)
+{
+    int low = 0;
+    int high = mainChain.size();
+
+    while (low < high)
+    {
+        int middle = low + (high - low) / 2;
+        if (value > mainChain[middle])
+            low = middle + 1;
+        else
+            high = middle;
+    }
+    return (low);
+}
+
+void PmergeMe::insertPendElementsDeque(std::deque<int>& mainChain, const std::deque<int>& smallers, int straggled)
+{
+    size_t i = 0;
+    int position; 
+    while (i < smallers.size())
+    {
+        position = findInsertPositionDeque(mainChain, smallers[i]);
+        mainChain.insert(mainChain.begin() + position, smallers[i]);
+        i++;
+    }
+    if (straggled != -1)
+    {
+        position = findInsertPositionDeque(mainChain, straggled);
+        mainChain.insert(mainChain.begin() + position, straggled);
+    }
+}
+
+std::deque<int> PmergeMe::MergeInsertionSortDeque(const std::deque<int>& numbers)
+{
+    std::deque<int> largers;
+    std::deque<int> sortedLargers;
+
+    if (numbers.size() <= 1)
+        return (numbers);
+    t_PairingResultDeque result = makePairsDeque(numbers);
+    for (size_t it = 0; it < result.pairs.size(); it++)
+        largers.push_back(result.pairs[it].second);
+    sortedLargers = MergeInsertionSortDeque(largers);
+    std::deque<int> smaller;
+    for (size_t i = 0; i < sortedLargers.size(); i++)
+    {
+        for (size_t j = 0; j < result.pairs.size(); j++)
+        {
+            if (sortedLargers[i] == result.pairs[j].second)
+            {
+                smaller.push_back(result.pairs[j].first);
+                break;
+            }
+        }
+    }
+    if (result.hasStraggled)
+        insertPendElementsDeque(sortedLargers, smaller, result.straggled);
+    else
+        insertPendElementsDeque(sortedLargers, smaller, -1);
     return (sortedLargers);
 }
 
@@ -153,12 +239,27 @@ void PmergeMe::ParseInput(int ac, char *av[])
         this->_deque.push_back(numb);
         i++;
     }
-
-    std::vector<int> numbers = MergeInsertionSort(this->_vector);
-    std::vector<int>::iterator a = numbers.begin();
-    while (a != numbers.end())
-    {
-        std::cout  << *a << " ";
-        a++;
-    }
+    std::cout << "Before: ";
+    for (size_t j = 0; j < this->_vector.size(); j++)
+        std::cout << this->_vector[j] << " ";
+    std::cout << std::endl;
+    struct timeval start_v;
+    struct timeval end_v;
+    gettimeofday(&start_v, NULL);
+    std::vector<int> numbersVector = MergeInsertionSortVector(this->_vector);
+    gettimeofday(&end_v, NULL);
+    float timeVector = (end_v.tv_sec * 1000000 + end_v.tv_usec) - (start_v.tv_sec * 1000000 + start_v.tv_usec);
+    std::cout << "After: ";
+    for (size_t k = 0; k < numbersVector.size(); k++)
+        std::cout << numbersVector[k] << " ";
+    
+    struct timeval start_d;
+    struct timeval end_d;
+    gettimeofday(&start_d, NULL);
+    std::deque<int> numbersDeque = MergeInsertionSortDeque(this->_deque);
+    gettimeofday(&end_d, NULL);
+    float timeDeque = (end_d.tv_sec * 1000000 + end_d.tv_usec) - (start_d.tv_sec * 1000000 + start_d.tv_usec);
+    std::cout << std::endl;
+    std::cout << "Time to process a range of " << this->_vector.size() << " elements with std::vector<int>: " << timeVector << " us" << std::endl;
+    std::cout << "Time to process a range of " << this->_deque.size() << " elements with std::deque<int>: " << timeDeque << " us" << std::endl;
 }
