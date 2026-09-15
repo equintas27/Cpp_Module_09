@@ -22,6 +22,8 @@
 #include <climits>
 #include <utility>
 #include <sys/time.h>
+#include <ctime>
+#include <iomanip>
 
 typedef struct s_PairingResultVector
 {
@@ -44,6 +46,7 @@ class PmergeMe
         std::vector<int>  _vector;
         std::deque<int> _deque;
         bool IsNumber(const std::string& str, int& numb);
+        void printAll(const std::vector<int>& vector,const std::deque<int>& deque);
 
         // Vector
         t_PairingResultVector makePairsVector(const std::vector<int>& values);
@@ -54,7 +57,7 @@ class PmergeMe
         t_PairingResultDeque makePairsDeque(const std::deque<int>& values);
         std::deque<int> MergeInsertionSortDeque(const std::deque<int>& numbers);
         void insertPendElementsDeque(std::deque<int>& mainChain, const std::deque<int>& smallers, int straggled);
-
+        
     public:
         PmergeMe();
         PmergeMe(const PmergeMe& src);

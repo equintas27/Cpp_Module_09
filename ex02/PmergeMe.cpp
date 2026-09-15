@@ -218,6 +218,28 @@ std::deque<int> PmergeMe::MergeInsertionSortDeque(const std::deque<int>& numbers
     return (sortedLargers);
 }
 
+void PmergeMe::printAll(const std::vector<int>& vector, const std::deque<int>& deque)
+{
+     std::cout << "Before: ";
+    for (size_t j = 0; j < vector.size(); j++)
+        std::cout << vector[j] << " ";
+    std::cout << std::endl;
+    std::clock_t start_v = std::clock();
+    std::vector<int> numbersVector = MergeInsertionSortVector(vector);
+    std::clock_t end_v = std::clock();
+    double timeVector = static_cast<double>(end_v - start_v) / (CLOCKS_PER_SEC / 1000000.0);
+    std::cout << "After: ";
+    for (size_t k = 0; k < numbersVector.size(); k++)
+        std::cout << numbersVector[k] << " ";
+    std::clock_t start_d = std::clock();
+    std::deque<int> numbersDeque = MergeInsertionSortDeque(deque);
+    std::clock_t end_d = std::clock();
+    double timeDeque = static_cast<double>(end_d - start_d) / (CLOCKS_PER_SEC / 1000000.0);
+    std::cout << std::endl;
+    std::cout << "Time to process a range of " << vector.size() << " elements with std::vector<int>: " << timeVector << " us" << std::endl;
+    std::cout << "Time to process a range of " << deque.size() << " elements with std::deque<int>: " << timeDeque << " us" << std::endl;
+}
+
 void PmergeMe::ParseInput(int ac, char *av[])
 {
     int numb;
@@ -230,7 +252,7 @@ void PmergeMe::ParseInput(int ac, char *av[])
             std::cerr << "Error" << std::endl;
             return ;
         }
-        if (numb < 0)
+        if (numb <= 0)
         {
             std::cerr << "Error" << std::endl;
             return ;
@@ -239,27 +261,5 @@ void PmergeMe::ParseInput(int ac, char *av[])
         this->_deque.push_back(numb);
         i++;
     }
-    std::cout << "Before: ";
-    for (size_t j = 0; j < this->_vector.size(); j++)
-        std::cout << this->_vector[j] << " ";
-    std::cout << std::endl;
-    struct timeval start_v;
-    struct timeval end_v;
-    gettimeofday(&start_v, NULL);
-    std::vector<int> numbersVector = MergeInsertionSortVector(this->_vector);
-    gettimeofday(&end_v, NULL);
-    float timeVector = (end_v.tv_sec * 1000000 + end_v.tv_usec) - (start_v.tv_sec * 1000000 + start_v.tv_usec);
-    std::cout << "After: ";
-    for (size_t k = 0; k < numbersVector.size(); k++)
-        std::cout << numbersVector[k] << " ";
-    
-    struct timeval start_d;
-    struct timeval end_d;
-    gettimeofday(&start_d, NULL);
-    std::deque<int> numbersDeque = MergeInsertionSortDeque(this->_deque);
-    gettimeofday(&end_d, NULL);
-    float timeDeque = (end_d.tv_sec * 1000000 + end_d.tv_usec) - (start_d.tv_sec * 1000000 + start_d.tv_usec);
-    std::cout << std::endl;
-    std::cout << "Time to process a range of " << this->_vector.size() << " elements with std::vector<int>: " << timeVector << " us" << std::endl;
-    std::cout << "Time to process a range of " << this->_deque.size() << " elements with std::deque<int>: " << timeDeque << " us" << std::endl;
+    printAll(this->_vector, this->_deque);
 }
